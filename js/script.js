@@ -18,7 +18,7 @@ P.S. Здесь есть несколько вариантов решения з
 'use strict';
 
 // Возьмите свой код из предыдущей практики
-document.addEventListener('DOMContentLoaded', () =>{
+document.addEventListener('DOMContentLoaded', () => {
     const movieDB = {
         movies: [
             "Логан",
@@ -28,63 +28,63 @@ document.addEventListener('DOMContentLoaded', () =>{
             "Скотт Пилигрим против..."
         ]
     };
-     const blocks = document.querySelectorAll('.promo__adv img'),
-            poster = document.querySelector('.promo__bg'),
-            genre = poster.querySelector('.promo__genre'),
-            movieList = document.querySelector('.promo__interactive-list'),
-            addForm = document.querySelector('form.add'),
-            addInput = addForm.querySelector('.adding__input'),
-            checkbox = addForm.querySelector('type=["checkbox"]');
+    const blocks = document.querySelectorAll('.promo__adv img'),
+        poster = document.querySelector('.promo__bg'),
+        genre = poster.querySelector('.promo__genre'),
+        movieList = document.querySelector('.promo__interactive-list'),
+        addForm = document.querySelector('form.add'),
+        addInput = addForm.querySelector('.adding__input'),
+     checkbox = addForm.querySelector('[type="checkbox"]');
 
 
-    addForm.addEventListener('submit', (e)=>{
+    addForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const newFilm = addInput.value;
+        let newFilm = addInput.value;
+        console.log(newFilm);
         const favorite = checkbox.checked;
-        movieDB.movies.push(newFilm);
-        movieDB.movies.sort();
+        if(newFilm){
+            if(newFilm.length > 21){
+                newFilm = `${newFilm.substring(0,22)}...`;
+            }
+            movieDB.movies.push(newFilm);
+        sortArr(movieDB.movies);
+        createMovieList(movieDB.movies, movieList); 
+        }
+
+       
+        e.target.reset();
     });
-    
     const deleteAdv = (arr) => {
         arr.forEach(item => {
             item.remove();
         });
     };
-    
-    deleteAdv(blocks);
-     genre.textContent = 'Драма';
-    
-    poster.style.backgroundImage = "url('img/bg.jpg')";
-    
-    
-    
-    movieDB.movies.sort();
-    
-    movieDB.movies.forEach((item,i) => {
-        movieList.innerHTML += `  <li class="promo__interactive-item"> #${i+1} ${item}
-                                    <div class="delete"></div>
-                                    </li>`
-    
-    });
-    
-    function createMvieList(films, parent) {
+   
+    const makeChanges = (g, p) => {
+        g.textContent = 'Драма';
+
+        p.style.backgroundImage = "url('img/bg.jpg')";
+    }
+   
+    const sortArr = (arr) => {
+        arr.sort();
+    };
+   
+    function createMovieList(films, parent) {
         parent.innerHTML = '';
 
-        films .forEach((item,i) => {
+        films.forEach((item, i) => {
             parent.innerHTML += `  <li class="promo__interactive-item"> #${i+1} ${item}
                                         <div class="delete"></div>
                                         </li>`
-        
-        });
-        
-    }
-    createMvieList(movieDB.movies, movieList);
-    
-    
-    
-    
-    
-    
-    console.log(poster.innerHTML);
-})
 
+        });
+
+    }
+    
+    //console.log(poster.textContent);
+    deleteAdv(blocks);
+    makeChanges(genre, poster);
+    sortArr(movieDB.movies);
+    createMovieList(movieDB.movies, movieList);
+})
