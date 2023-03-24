@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if(newFilm.length > 21){
                 newFilm = `${newFilm.substring(0,22)}...`;
             }
+            if(favorite){
+                console.log('Добавляем любимый фильм');
+            }
             movieDB.movies.push(newFilm);
         sortArr(movieDB.movies);
         createMovieList(movieDB.movies, movieList); 
@@ -72,19 +75,25 @@ document.addEventListener('DOMContentLoaded', () => {
    
     function createMovieList(films, parent) {
         parent.innerHTML = '';
-
+        sortArr(films);
         films.forEach((item, i) => {
             parent.innerHTML += `  <li class="promo__interactive-item"> #${i+1} ${item}
                                         <div class="delete"></div>
                                         </li>`
 
         });
-
+        document.querySelectorAll('.delete').forEach((btn, i) => {
+            btn.addEventListener('click', () =>{
+                btn.parentElement.remove();
+                films.splice(i, 1);
+                createMovieList(films, parent); 
+            })
+        })
     }
     
     //console.log(poster.textContent);
     deleteAdv(blocks);
     makeChanges(genre, poster);
-    sortArr(movieDB.movies);
+    
     createMovieList(movieDB.movies, movieList);
 })
